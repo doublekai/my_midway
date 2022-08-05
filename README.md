@@ -29,3 +29,5 @@ $ npm stop
 
 [midway]: https://midwayjs.org
 # my_midway
+### swagger地址
+http://127.0.0.1:8080/swagger-ui/index.html

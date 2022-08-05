@@ -12,10 +12,10 @@ export class UserModel {
   @Column()
   username: string;
 
-  @Column()
-  sex: Boolean;
+  @Column({ default: 1 })
+  sex: number;
 
-  @Column()
+  @Column({ default: false })
   isPublished: boolean;
 
 }

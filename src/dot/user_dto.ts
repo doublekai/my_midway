@@ -1,7 +1,9 @@
 
 import { ApiProperty } from '@midwayjs/swagger';
 import { Rule, RuleType } from '@midwayjs/validate';
-
+/*
+下面是接口请求的参数以及校验
+*/
 export class PostUserDTO {
 
 
@@ -15,7 +17,7 @@ export class PostUserDTO {
   description: string;
 
   @Rule(RuleType.number().max(1))
-  @ApiProperty({ example: 1, description: '男女 男=1女=0' })
+  @ApiProperty({ example: 1, description: '男女 男=1女=0,默认不传为男' })
   sex: number;
 }
 export class GetUserDTo extends PostUserDTO {
@@ -33,7 +35,7 @@ export class PutUserDTo extends PostUserDTO {
   @ApiProperty({ example: '后端开发工程师', description: '用户描述' })
   description: string;
 
-  @Rule(RuleType.number().max(1).empty(''))
+  @Rule(RuleType.number().max(1).empty())
   @ApiProperty({ example: 1, description: '男女 男=1女=0' })
   sex: number;
 }
@@ -51,4 +53,20 @@ export class PageRequestDot {
 
 }
 
+/*
+下面是接口返回数据定义
+*/
+export class R<T> {
+  @ApiProperty({ example: '200', description: '返回状态码' })
+  code: number;
+  @ApiProperty({ example: '请求成功', description: '返回信息' })
+  msg: string;
+  @ApiProperty({ example: '1231322222', description: '10位时间戳' })
+  time: number;
+  @ApiProperty({ example: "{}", description: '返回数据' })
+  data: T;
+}
+export class UserResponse extends R<GetUserDTo> {
+
+}
 

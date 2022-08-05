@@ -1,9 +1,11 @@
 import { ALL, Body, Controller, Del, Get, Inject, Param, Post, Put, Query } from "@midwayjs/decorator";
+import { ApiResponse } from "@midwayjs/swagger";
 import { InjectEntityModel } from "@midwayjs/typeorm";
 import { Validate } from '@midwayjs/validate';
 import { Context } from "egg";
 import { Repository } from "typeorm";
-import { PageRequestDot, PostUserDTO, PutUserDTo } from "../../dot/user_dto";
+import { OK } from "../../config/config.common";
+import { PageRequestDot, PostUserDTO, PutUserDTo, UserResponse } from "../../dot/user_dto";
 import { UserModel } from "../../entity/User";
 
 @Controller('/api/user')
@@ -12,23 +14,23 @@ export class UserController {
   ctx: Context;
   @InjectEntityModel(UserModel)
   UserModel: Repository<UserModel>;
-
   @Get('/', { summary: '用户信息', description: "获取用户信息" })
   @Validate()
   async get_user(@Query(ALL) query: PageRequestDot) {
     let users = await this.UserModel.find({ where: { isPublished: false } });
-    return {
-      code: 200,
-      msg: "请求成功",
-      data: [users, query]
-    };
+    return OK.register(users);
 
   }
   @Post('/')
+  @ApiResponse({
+    status: 200,
+    description: 'The found record',
+    type: UserResponse,
+  })
   @Validate()
   async add_user(@Body() usertod: PostUserDTO) {
     let users = await this.UserModel.save(usertod);
-    return { 's': usertod, 'data': users };
+    return OK.register(users);
 
   }
   @Put('/:id')
@@ -43,7 +45,7 @@ export class UserController {
       users[key] = usertod[key];
     })
     await this.UserModel.save(users);
-    return { 's': users, 'data': usertod };
+    return OK.register(users)
   }
   @Del('/:id')
   @Validate()
@@ -55,6 +57,6 @@ export class UserController {
     });
     users.isPublished = true;
     await this.UserModel.save(users);
-    return { 's': users, 'data': users };
+    return OK.register(undefined, "删除成功")
   }
 }

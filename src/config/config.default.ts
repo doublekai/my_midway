@@ -5,6 +5,7 @@ export default {
 
   // ...
   keys: '1639994056460_8009',
+
   typeorm: {
     dataSource: {
       default: {
@@ -22,6 +23,8 @@ export default {
     }
   },
 }
+
+
 // ddataSource: {
 //   default: {
 //     type: 'sqlite',
